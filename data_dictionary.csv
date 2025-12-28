@@ -1,0 +1,7 @@
+Column,Category,CDE,BusinessOwner,DataSteward,Sensitivity,RetentionPolicy,QualityRule
+VendorID,Master,Yes,Transportation Ops,Data Engineering,Internal,7 years,Must exist in vendor master
+PULocationID,Master,Yes,Transportation Ops,Data Engineering,Internal,7 years,Must exist in zone master
+DOLocationID,Master,Yes,Transportation Ops,Data Engineering,Internal,7 years,Must exist in zone master
+fare_amount,Transactional,Yes,Finance,Data Engineering,Internal,7 years,Must be >= 0
+total_amount,Transactional,Yes,Finance,Data Engineering,Internal,7 years,Must be >= fare_amount
+payment_type,Reference,No,Compliance,Data Engineering,Internal,7 years,Must be valid code

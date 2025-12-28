@@ -1,0 +1,14 @@
+{
+    "dataset": "NYC Yellow Taxi Trips",
+    "bucket": "nyc-taxi-data-dev-ravikanth-us-east-1",
+    "owner": "DataEngineeringTeam",
+    "domain": "Transportation",
+    "classification": "Internal",
+    "created_on": "2025-12-28T23:04:52.201879+00:00",
+    "retention_policy": "7 years",
+    "zones": [
+        "raw",
+        "processed",
+        "curated"
+    ]
+}
