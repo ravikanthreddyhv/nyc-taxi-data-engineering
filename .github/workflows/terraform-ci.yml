@@ -6,27 +6,40 @@ on:
       - "day5-infra/terraform/**"
       - "day5-infra/governance/**"
   workflow_dispatch:
+
 jobs:
   plan-dev:
     runs-on: ubuntu-latest
+
     defaults:
       run:
         working-directory: day5-infra/terraform/envs/dev
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: hashicorp/setup-terraform@v3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ✅ REQUIRED: AWS authentication for Terraform
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.7.5
 
       - name: Terraform fmt
         run: terraform fmt -check -recursive
 
-      - name: Init
+      - name: Terraform init
         run: terraform init
 
-      - name: Validate
+      - name: Terraform validate
         run: terraform validate
 
-      - name: Plan (dev)
+      - name: Terraform plan (dev)
         run: terraform plan -input=false -var-file=terraform.tfvars.example
