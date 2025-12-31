@@ -5,7 +5,7 @@ on:
     paths:
       - "day5-infra/terraform/**"
       - "day5-infra/governance/**"
-
+  workflow_dispatch:
 jobs:
   plan-dev:
     runs-on: ubuntu-latest
