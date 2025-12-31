@@ -8,3 +8,7 @@ terraform.tfstate.*
 # OS / Editor
 .DS_Store
 .vscode/
+
+# Build artifacts
+lambda.zip
+*.pem
