@@ -22,7 +22,7 @@ CLASSIFICATION = "Internal"
 s3 = boto3.client("s3", region_name=REGION)
 
 # -----------------------------
-# 1️⃣ CREATE S3 BUCKET
+# 1CREATE S3 BUCKET
 # -----------------------------
 
 def create_bucket():
@@ -33,7 +33,7 @@ def create_bucket():
         print("Bucket already exists")
 
 # -----------------------------
-# 2️⃣ ENABLE BUCKET VERSIONING (NEW)
+#  ENABLE BUCKET VERSIONING (NEW)
 # -----------------------------
 
 def enable_versioning():
@@ -44,7 +44,7 @@ def enable_versioning():
     print("Bucket versioning enabled")
 
 # -----------------------------
-# 3️⃣ CREATE PREFIXES (NEW)
+#  CREATE PREFIXES (NEW)
 # -----------------------------
 
 def create_prefixes():
@@ -53,7 +53,7 @@ def create_prefixes():
     print("Prefixes created: raw/, processed/, curated/, metadata/")
 
 # -----------------------------
-# 4️⃣ CONFIGURE BUCKET POLICY
+#  CONFIGURE BUCKET POLICY
 # -----------------------------
 
 def apply_bucket_policy():
@@ -79,7 +79,7 @@ def apply_bucket_policy():
     print("Private bucket policy applied")
 
 # -----------------------------
-# 5️⃣ APPLY LIFECYCLE RULES
+#  APPLY LIFECYCLE RULES
 # -----------------------------
 
 def apply_lifecycle_policy():
@@ -146,7 +146,7 @@ def upload_data_dictionary():
 
 
 # -----------------------------
-# 7️⃣ CREATE METADATA MANIFEST
+#  CREATE METADATA MANIFEST
 # -----------------------------
             
 

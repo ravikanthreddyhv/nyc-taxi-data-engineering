@@ -1,0 +1,18 @@
+aws_region      = "us-east-1"
+
+# MUST be globally unique
+s3_bucket_name  = "taxi-mdm-prod-test-2025"
+lambda_name     = "taxi-mdm-prod-lambda"
+lambda_zip_path = "../../lambda.zip"
+
+db_identifier   = "taxi-mdm-prod-db"
+db_name         = "taxi_mdm"
+master_username = "postgres"
+master_password = "Postgres1234"
+
+# Get from AWS Console -> VPC -> Your default VPC
+vpc_id          = "vpc-04f3d5d80412aa032"
+subnet_ids      = ["subnet-01d6feacbacd63afe", "subnet-083d7f799b6d8b9bc"]
+
+# IMPORTANT: put your current public IP /32
+allowed_cidrs   = ["50.54.243.250/32"]

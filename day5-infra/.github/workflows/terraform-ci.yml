@@ -1,0 +1,32 @@
+name: Terraform CI
+
+on:
+  pull_request:
+    paths:
+      - "day5-infra/terraform/**"
+      - "day5-infra/governance/**"
+
+jobs:
+  plan-dev:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: day5-infra/terraform/envs/dev
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
+
+      - name: Terraform fmt
+        run: terraform fmt -check -recursive
+
+      - name: Init
+        run: terraform init
+
+      - name: Validate
+        run: terraform validate
+
+      - name: Plan (dev)
+        run: terraform plan
