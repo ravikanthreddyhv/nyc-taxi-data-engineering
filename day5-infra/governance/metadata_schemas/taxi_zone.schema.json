@@ -1,0 +1,16 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Taxi Zone Master",
+    "type": "object",
+    "properties": {
+      "zone_id": { "type": "integer" },
+      "zone_name": { "type": "string", "minLength": 1 },
+      "borough": { "type": "string" },
+      "service_zone": { "type": ["string", "null"] },
+      "status": { "type": "string", "enum": ["ACTIVE", "INACTIVE"] },
+      "version": { "type": "integer", "minimum": 1 }
+    },
+    "required": ["zone_id", "zone_name", "borough", "status", "version"],
+    "additionalProperties": false
+  }
+  

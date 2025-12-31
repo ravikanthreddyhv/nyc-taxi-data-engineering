@@ -1,0 +1,17 @@
+suite_name: taxi_zone_master_quality
+rules:
+  - name: zone_id_unique
+    type: uniqueness
+    column: zone_id
+    threshold: 1.0
+
+  - name: zone_name_not_null
+    type: not_null
+    column: zone_name
+    threshold: 1.0
+
+  - name: borough_allowed_values
+    type: allowed_values
+    column: borough
+    allowed: [Manhattan, Brooklyn, Queens, Bronx, Staten Island]
+    threshold: 0.99
