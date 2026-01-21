@@ -16,6 +16,6 @@ for f in glob.glob("governance/*.json"):
     validate_json(f)
 
 # Step Functions
-validate_json("step_functions/nyc_pipeline.json")
+validate_json("step_functions/Tests.json")
 
 print("All JSON files validated")
