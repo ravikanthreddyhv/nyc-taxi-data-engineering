@@ -1,0 +1,24 @@
+{
+    "dataset": "nyc_taxi_trips",
+    "owner": "data-steward",
+    "rules": [
+      {
+        "rule_id": "pickup_time_not_null",
+        "column": "pickup_datetime",
+        "check": "not_null",
+        "severity": "ERROR"
+      },
+      {
+        "rule_id": "passenger_count_valid",
+        "column": "passenger_count",
+        "check": "between",
+        "min": 1,
+        "max": 8,
+        "severity": "WARN"
+      }
+    ],
+    "thresholds": {
+      "max_error_rate": 0.01
+    }
+  }
+  

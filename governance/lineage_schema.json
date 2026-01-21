@@ -1,0 +1,16 @@
+{
+    "pipeline_name": "nyc_taxi_pipeline",
+    "layers": ["raw", "validated", "curated", "analytics"],
+    "required_fields": [
+      "pipeline_run_id",
+      "job_name",
+      "source_layer",
+      "target_layer",
+      "source_object",
+      "target_object",
+      "record_count",
+      "run_timestamp"
+    ],
+    "writer": "write_data_lineage_lambda"
+  }
+  
