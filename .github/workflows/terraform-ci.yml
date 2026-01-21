@@ -1,3 +1,16 @@
+name: Terraform CI
+
+on:
+  pull_request:
+    paths:
+      - "day5-infra/terraform/**"
+      - "day5-infra/governance/**"
+      - "governance/**"
+      - "glue_jobs/**"
+      - "lambda/**"
+      - "step_functions/**"
+  workflow_dispatch:
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -21,20 +34,13 @@ jobs:
         run: |
           python -m py_compile lambda/*/*.py
 
-name: Terraform CI
-
-on:
-  pull_request:
-    paths:
-      - "day5-infra/terraform/**"
-      - "day5-infra/governance/**"
-  workflow_dispatch:
-jobs:
   plan-dev:
+    needs: validate
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: day5-infra/terraform/envs/dev
+
     steps:
       - uses: actions/checkout@v4
 
@@ -45,11 +51,11 @@ jobs:
       - name: Terraform fmt
         run: terraform fmt -check -recursive
 
-      - name: Init
+      - name: Terraform init
         run: terraform init
 
-      - name: Validate
+      - name: Terraform validate
         run: terraform validate
 
-      - name: Plan (dev)
-        run: terraform plan -input=false -var-file=terraform.tfvars.example
+      - name: Terraform plan (dev)
+        run: terraform plan -input=false
