@@ -15,7 +15,8 @@ def validate_json(path):
 for f in glob.glob("governance/*.json"):
     validate_json(f)
 
-# Step Functions
-validate_json("step_functions/Tests.json")
+# Step Functions (validate ALL definitions)
+for f in glob.glob("step_functions/*.json"):
+    validate_json(f)
 
 print("All JSON files validated")
