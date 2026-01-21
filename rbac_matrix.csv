@@ -1,0 +1,8 @@
+role_name,raw_zone,validated_zone,curated_zone,governance_zone,description
+nyc-etl-glue-role,read_write,read_write,read_write,read,ETL jobs ingest, validate, and curate data
+nyc-data-analyst-read-role,no_access,read,read,no_access,Analysts consume trusted curated data only
+nyc-steward-role,read,read,read,read_write,Data stewards manage quality rules, golden records, approvals
+
+
+
+#Who can access which stage

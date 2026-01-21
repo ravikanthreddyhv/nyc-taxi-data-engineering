@@ -1,0 +1,6 @@
+dataset_name,source_zone,source_location,etl_job,transformation_type,target_zone,target_location,refresh_type,owner
+nyc_taxi_raw,external,NYC Taxi Public Dataset,raw_ingestion_job,ingestion,raw,s3://nyc-taxi-data-dev-ravikanth-us-east-1/raw/,batch,data_engineering
+nyc_taxi_validated,raw,s3://nyc-taxi-data-dev-ravikanth-us-east-1/raw/,raw_to_validated_delta,cleansing_validation,validated,s3://nyc-taxi-data-dev-ravikanth-us-east-1/validated/,batch,data_engineering
+nyc_taxi_enriched_v2,validated,s3://nyc-taxi-data-dev-ravikanth-us-east-1/validated/,day7_enrichment_final,enrichment_join,curated,s3://nyc-taxi-data-dev-ravikanth-us-east-1/curated/,batch,analytics_team
+master_vendors,governance,s3://nyc-taxi-data-dev-ravikanth-us-east-1/governance/,master_data_job,mdm_golden_record,governance,s3://nyc-taxi-data-dev-ravikanth-us-east-1/governance/,incremental,data_steward
+#How data moves

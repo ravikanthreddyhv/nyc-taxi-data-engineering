@@ -6,3 +6,4 @@ fare_amount,Transactional,Yes,Finance,Data Engineering,Internal,7 years,Must be 
 total_amount,Transactional,Yes,Finance,Data Engineering,Internal,7 years,Must be >= fare_amount
 payment_type,Reference,No,Compliance,Data Engineering,Internal,7 years,Must be valid code
 # Added governance attributes for NYC Taxi dataset
+# Schema & business meaning

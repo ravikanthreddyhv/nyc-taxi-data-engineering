@@ -1,0 +1,3 @@
+master_vendor_id,action,changed_by,change_reason,changed_at
+MV-00001,DEPRECATE,mdm_owner_1,Duplicate vendor consolidated into a newer supplier master,2026-01-05T17:39:42.795311+00:00
+MV-00001,RETIRE,mdm_owner_1,Vendor no longer valid; archived for compliance,2026-01-05T17:39:42.796151+00:00

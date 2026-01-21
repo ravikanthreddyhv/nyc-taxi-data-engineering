@@ -1,0 +1,2 @@
+golden_vendor_name,golden_vendor_address,city,state,source_vendor_ids,lifecycle_state,effective_from,effective_to,approved_by,approved_at,created_at,master_vendor_id,change_reason,changed_by,changed_at
+Global Supply Co,88 Park Avenue,Boston,MA,"5,4",RETIRED,2026-01-05 07:32:17.219507+00:00,2026-01-05T17:39:42.795648+00:00,steward_user_1,2026-01-05 07:32:17.220089+00:00,2026-01-05 07:32:17.219507+00:00,MV-00001,Vendor no longer valid; archived for compliance,mdm_owner_1,2026-01-05T17:39:42.795897+00:00

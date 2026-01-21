@@ -1,0 +1,17 @@
+dataset: zone_dim
+type: dimension
+grain: one row per taxi zone
+source:
+  system: NYC TLC
+  table: taxi_zones
+keys:
+  business_key: location_id
+  surrogate_key: zone_key
+attributes:
+  - borough
+  - zone
+  - service_zone
+data_quality:
+  unknown_row:
+    location_id: -1
+    description: "Fallback for unmapped zones"

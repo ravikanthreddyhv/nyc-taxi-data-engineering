@@ -1,0 +1,21 @@
+{
+    "vendor_rules": [
+      {
+        "rule_id": "VENDOR_NAME_NOT_NULL",
+        "dimension": "Completeness",
+        "column": "vendor_name",
+        "condition": "NOT_NULL",
+        "threshold": 100,
+        "action_on_failure": "QUARANTINE"
+      },
+      {
+        "rule_id": "STATE_VALID",
+        "dimension": "Validity",
+        "column": "state",
+        "condition": "IN",
+        "allowed_values": ["NY", "CA", "TX", "MA"],
+        "action_on_failure": "FAIL_JOB"
+      }
+    ]
+  }
+  

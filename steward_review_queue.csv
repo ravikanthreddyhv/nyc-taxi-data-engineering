@@ -1,0 +1,6 @@
+vendor_id_1,vendor_id_2,name_score,address_score,final_score,confidence_bucket,governance_action,review_status,reviewed_by,reviewed_at,created_at
+5,4,77,88,80.3,MEDIUM,STEWARD_REVIEW,PENDING,,,2026-01-05 07:32:17.213432+00:00
+#| Aspect  | Description            |
+#| ------- | ---------------------- |
+#| Governs | Steward actions        |
+#| Answers | “What needs approval?” |
