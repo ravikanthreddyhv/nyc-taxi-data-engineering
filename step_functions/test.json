@@ -1,0 +1,230 @@
+{
+    "Comment": "NYC Taxi Data Pipeline with Governance Gate (Option A)",
+    "StartAt": "Run Glue-1 Raw to Validated",
+    "States": {
+      "Run Glue-1 Raw to Validated": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::glue:startJobRun.sync",
+        "Parameters": {
+          "JobName": "nyc_raw_to_validated_etl",
+          "Arguments": {
+            "--SOURCE_BUCKET.$": "$.bucket"
+          }
+        },
+        "ResultPath": "$.glue1_result",
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "States.Timeout",
+              "States.TaskFailed",
+              "Glue.AWSGlueException",
+              "Glue.ConcurrentRunsExceededException",
+              "Glue.InternalServiceException"
+            ],
+            "IntervalSeconds": 60,
+            "MaxAttempts": 3,
+            "BackoffRate": 2
+          }
+        ],
+        "Next": "Write Lineage Raw to Validated",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "Pipeline Failed"
+          }
+        ]
+      },
+      "Write Lineage Raw to Validated": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "Parameters": {
+          "FunctionName": "arn:aws:lambda:us-east-1:160013954436:function:write_data_lineage",
+          "Payload": {
+            "pipeline_name": "nyc_taxi_pipeline",
+            "pipeline_stage": "raw_to_validated",
+            "source_layer": "raw",
+            "target_layer": "validated",
+            "source_dataset": "nyc_taxi_trips_raw",
+            "target_dataset": "nyc_taxi_trips_validated",
+            "dataset_layer": "validated",
+            "dataset_name": "nyc_taxi_trips_validated",
+            "transformation_name": "nyc_raw_to_validated_etl",
+            "transformation_type": "GLUE"
+          }
+        },
+        "ResultPath": "$.lineage_raw_validated",
+        "Next": "Run Governance Gate",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "Pipeline Failed"
+          }
+        ]
+      },
+      "Run Governance Gate": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "Parameters": {
+          "FunctionName": "dq-governance-gate",
+          "Payload": {
+            "bucket.$": "$.bucket"
+          }
+        },
+        "ResultPath": "$.governance",
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "Lambda.ServiceException",
+              "Lambda.AWSLambdaException",
+              "Lambda.SdkClientException",
+              "States.Timeout"
+            ],
+            "IntervalSeconds": 10,
+            "MaxAttempts": 2,
+            "BackoffRate": 2
+          }
+        ],
+        "Next": "Governance Decision",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "Pipeline Failed"
+          }
+        ]
+      },
+      "Governance Decision": {
+        "Type": "Choice",
+        "Choices": [
+          {
+            "Variable": "$.governance.Payload.decision",
+            "StringEquals": "PASS",
+            "Next": "Run Glue-2 Validated to Curated"
+          }
+        ],
+        "Default": "Notify Steward and Quarantine"
+      },
+      "Run Glue-2 Validated to Curated": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::glue:startJobRun.sync",
+        "Parameters": {
+          "JobName": "nyc_validated_to_curated_etl"
+        },
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "States.Timeout",
+              "States.TaskFailed",
+              "Glue.AWSGlueException",
+              "Glue.ConcurrentRunsExceededException",
+              "Glue.InternalServiceException"
+            ],
+            "IntervalSeconds": 60,
+            "MaxAttempts": 3,
+            "BackoffRate": 2
+          }
+        ],
+        "Next": "Write Lineage Validated to Curated",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "Pipeline Failed"
+          }
+        ]
+      },
+      "Write Lineage Validated to Curated": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::lambda:invoke",
+        "Parameters": {
+          "FunctionName": "arn:aws:lambda:us-east-1:160013954436:function:write_data_lineage",
+          "Payload": {
+            "pipeline_name": "nyc_taxi_pipeline",
+            "pipeline_stage": "validated_to_curated",
+            "source_layer": "validated",
+            "target_layer": "curated",
+            "source_dataset": "nyc_taxi_trips_validated",
+            "target_dataset": "nyc_taxi_trips_curated",
+            "dataset_layer": "curated",
+            "dataset_name": "nyc_taxi_trips_curated",
+            "transformation_name": "nyc_validated_to_curated_etl",
+            "transformation_type": "GLUE"
+          }
+        },
+        "ResultPath": "$.lineage_validated_curated",
+        "Next": "Run Glue-3 Curated to Redshift",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "Pipeline Failed"
+          }
+        ]
+      },
+      "Run Glue-3 Curated to Redshift": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::glue:startJobRun.sync",
+        "Parameters": {
+          "JobName": "nyc_curated_s3_to_redshift"
+        },
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "States.Timeout",
+              "States.TaskFailed",
+              "Glue.AWSGlueException"
+            ],
+            "IntervalSeconds": 60,
+            "MaxAttempts": 2,
+            "BackoffRate": 2
+          }
+        ],
+        "Next": "Pipeline Success",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "Next": "Pipeline Failed"
+          }
+        ]
+      },
+      "Notify Steward and Quarantine": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::sns:publish",
+        "Parameters": {
+          "TopicArn": "arn:aws:sns:us-east-1:160013954436:nyc-taxi-steward-approval",
+          "Message": {
+            "default": "Data Quality Gate Failed – manual review required"
+          }
+        },
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "SNS.InternalError",
+              "SNS.ServiceUnavailable"
+            ],
+            "IntervalSeconds": 5,
+            "MaxAttempts": 3,
+            "BackoffRate": 2
+          }
+        ],
+        "Next": "Pipeline Failed"
+      },
+      "Pipeline Success": {
+        "Type": "Succeed"
+      },
+      "Pipeline Failed": {
+        "Type": "Fail",
+        "Error": "DATA_GOVERNANCE_FAILED",
+        "Cause": "Pipeline stopped due to data quality or system error"
+      }
+    }
+  }
